@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { Note as NoteModel } from './models/note';
 import Note from './components/Note';
 import classes from './styles/NotesPage.module.css';
+import * as NotesApi from './network/notes_api'
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -10,8 +11,7 @@ function App() {
   useEffect(() => {
     const loadNotes = async () => {
       try {
-        const response = await fetch('/api/notes');
-        const notes = await response.json();
+        const notes = await NotesApi.fetchNotes()
         setNotes(notes);
       } catch (error) {
         console.log(error);
