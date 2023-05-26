@@ -29,17 +29,17 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
 
   try {
     if (!username || !email || !passwordRaw) {
-      throw createHttpError(400, 'parameters are missing');
+      throw createHttpError(400, 'Popunite sva obavezna polja.');
     }
 
     const existingUsername = await userModel.findOne({ username: username }).exec();
     if (existingUsername) {
-      throw createHttpError(409, 'Username already Exists!');
+      throw createHttpError(409, 'Korisničko ime već postoji.');
     }
 
     const existingEmail = await userModel.findOne({ email: email }).exec();
     if (existingEmail) {
-      throw createHttpError(409, 'A user with this email already exists!');
+      throw createHttpError(409, 'Korisnik sa unesenom Email adresom već postoji.');
     }
 
     const passwordHashed = await bcrypt.hash(passwordRaw, 10);
@@ -73,18 +73,18 @@ export const login: RequestHandler<unknown, unknown, LoginBody, unknown> = async
 
   try {
     if (!username || !password) {
-      throw createHttpError(400, 'parameters missing');
+      throw createHttpError(400, 'Popunite sva obavezna polja');
     }
     const user = await userModel.findOne({ username: username }).select('+password +email').exec();
 
     if (!user) {
-      throw createHttpError(401, 'Invalid credentials');
+      throw createHttpError(401, 'Korisničko ime nije tačno');
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      throw createHttpError(401, 'Invalid credentials');
+      throw createHttpError(401, 'Šifra nije tačna');
     }
 
     req.session.userID = user._id;

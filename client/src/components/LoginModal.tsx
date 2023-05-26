@@ -2,9 +2,11 @@ import { useForm } from 'react-hook-form';
 import { User } from '../models/user';
 import { LoginCredentials } from '../network/notes_api';
 import * as NotesApi from '../network/notes_api';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import TextInputField from './form/TextInputField';
 import classesUtils from '../styles/utils.module.css';
+import { useState } from 'react';
+import { UnauthorizedError } from '../errors/http_error';
 
 type Props = {
   onDismiss: () => void;
@@ -12,6 +14,8 @@ type Props = {
 };
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: Props) => {
+  const [errorText, setErrorText] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -23,7 +27,11 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: Props) => {
       const user = await NotesApi.login(credentials);
       onLoginSuccessful(user);
     } catch (error) {
-      alert(error);
+      if (error instanceof UnauthorizedError) {
+        setErrorText(error.message);
+      } else {
+        alert(error);
+      }
       console.log(error);
     }
   }
@@ -35,6 +43,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: Props) => {
       </Modal.Header>
 
       <Modal.Body>
+        {errorText && <Alert variant='danger'>{errorText}</Alert>}
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name='username'
