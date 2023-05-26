@@ -17,14 +17,14 @@ const Note: React.FC<Props> = ({ onNoteClicked, note, onDeleteNoteClicked, class
 
   let createdUpdatedText: string;
   if (updatedAt > createdAt) {
-    createdUpdatedText = 'Updated: ' + formatDate(updatedAt);
+    createdUpdatedText = 'Editovan: ' + formatDate(updatedAt);
   } else {
-    createdUpdatedText = 'Created: ' + formatDate(createdAt);
+    createdUpdatedText = 'Kreiran: ' + formatDate(createdAt);
   }
 
   return (
-    <Card className={`${classes.noteCard} ${className}`} onClick={() => onNoteClicked(note)}>
-      <Card.Body className={classes.cardBody}>
+    <Card className={`${classes.noteCard} ${className}`}>
+      <Card.Header>
         <Card.Title className={classesUtils.flexCenter}>
           {title}
           <Button
@@ -36,6 +36,9 @@ const Note: React.FC<Props> = ({ onNoteClicked, note, onDeleteNoteClicked, class
             <MdDelete />
           </Button>
         </Card.Title>
+      </Card.Header>
+      <Card.Body className={classes.cardBody} onClick={() => onNoteClicked(note)}>
+        <Card.Title className={classesUtils.flexCenter}></Card.Title>
         <Card.Text className={classes.cardText}>{text}</Card.Text>
       </Card.Body>
       <Card.Footer className='text-muted'>{createdUpdatedText}</Card.Footer>

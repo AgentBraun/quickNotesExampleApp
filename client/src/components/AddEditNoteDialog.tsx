@@ -3,6 +3,7 @@ import { Note } from '../models/note';
 import { useForm } from 'react-hook-form';
 import { NoteInput } from '../network/notes_api';
 import * as NotesApi from '../network/notes_api';
+import TextInputField from './form/TextInputField';
 
 type Props = {
   noteToEdit?: Note;
@@ -40,31 +41,34 @@ const AddEditNoteDialog = (props: Props) => {
   return (
     <Modal show onHide={props.onDismiss}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.noteToEdit ? 'Edit note' : 'Add note'}</Modal.Title>
+        <Modal.Title>{props.noteToEdit ? 'Uredi bilješku' : 'Dodaj novu bilješku'}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form id='addEditNoteForm' onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className={'mb-3'}>
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type='text'
-              placeholder={'Title'}
-              isInvalid={!!errors.title}
-              {...register('title', { required: 'Required' })}
-            />
-            <Form.Control.Feedback type='invalid'>{errors.title?.message}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className={'mb-3'}>
-            <Form.Label>Text</Form.Label>
-            <Form.Control as='textarea' placeholder={'Text'} rows={5} {...register('text')} />
-          </Form.Group>
+          <TextInputField
+            name='title'
+            label='Naslov'
+            type='text'
+            placeholder='Moja nova bilješka'
+            register={register}
+            registerOptions={{ required: 'Required' }}
+            error={errors.title}
+          />
+          <TextInputField
+            as='textarea'
+            rows={5}
+            name='text'
+            label='Tekst'
+            placeHolder='Kupiti mlijeko, voće i povrće, hljeb.'
+            register={register}
+          />
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
         <Button type='submit' form='addEditNoteForm' disabled={isSubmitting}>
-          Save
+          Spremi
         </Button>
       </Modal.Footer>
     </Modal>
