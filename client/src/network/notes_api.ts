@@ -25,6 +25,10 @@ export async function getUsers(): Promise<User[]> {
   return response.json();
 }
 
+export async function deleteUser(userID: string) {
+  await fetchData('/api/admin/' + userID, { method: 'DELETE' });
+}
+
 export async function getLoggedInUser(): Promise<User> {
   const response = await fetchData('/api/users', { method: 'GET' });
   return response.json();

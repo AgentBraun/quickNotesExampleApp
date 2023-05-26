@@ -11,6 +11,19 @@
   gap: 4px;
 }
 
+.flexCenterRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
 .width100 {
   width: 100%;
+}
+
+.Pupdown {
+  padding: 50px 0;
 }
