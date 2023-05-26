@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import createHttpError from 'http-errors';
 import userModel from '../models/user';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   try {
@@ -26,6 +27,7 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
   const username = req.body.username;
   const email = req.body.email;
   const passwordRaw = req.body.password;
+  const roll = 1;
 
   try {
     if (!username || !email || !passwordRaw) {
@@ -48,6 +50,7 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
       username,
       email,
       password: passwordHashed,
+      roll,
     });
 
     req.session.userID = newUser._id;
@@ -102,4 +105,33 @@ export const logout: RequestHandler = (req, res, next) => {
       res.sendStatus(200);
     }
   });
+};
+
+export const getUsers: RequestHandler = async (req, res, next) => {
+  try {
+    const users = await userModel.find({}).exec();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const userID = req.params.userID;
+
+  try {
+    if (!mongoose.isValidObjectId(userID)) {
+      throw createHttpError(400, 'Invalid note ID');
+    }
+
+    const user = await userModel.findById(userID).exec();
+
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    console.log(user);
+  } catch (error) {
+    next(error);
+  }
 };

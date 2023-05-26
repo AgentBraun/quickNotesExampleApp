@@ -20,6 +20,11 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
   }
 }
 
+export async function getUsers(): Promise<User[]> {
+  const response = await fetchData('/api/admin/users');
+  return response.json();
+}
+
 export async function getLoggedInUser(): Promise<User> {
   const response = await fetchData('/api/users', { method: 'GET' });
   return response.json();
