@@ -63,7 +63,13 @@ const AdminView = (props: Props) => {
                     <Button variant='danger' size='sm' onClick={() => deleteUser(user)}>
                       izbriši
                     </Button>{' '}
-                    <Button onClick={() => setShowEditUserDialog(true)} size='sm'>
+                    <Button
+                      onClick={() => {
+                        setShowEditUserDialog(true);
+                        setUserToEdit(user);
+                      }}
+                      size='sm'
+                    >
                       Uredi
                     </Button>
                   </td>

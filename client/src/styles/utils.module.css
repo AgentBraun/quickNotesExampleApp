@@ -27,3 +27,16 @@
 .Pupdown {
   padding: 50px 0;
 }
+
+.textBlack {
+  color: black;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.link:hover {
+  color: white;
+}
