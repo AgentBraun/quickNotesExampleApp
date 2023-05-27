@@ -18,15 +18,18 @@ interface Props {
 function CardUser(props: Props) {
   return (
     <Card style={{ width: '25rem' }}>
-      <Card.Img variant='top' src={`${props.img}`} />
+      <Card.Img
+        style={{ height: '25rem', objectFit: 'cover' }}
+        variant='top'
+        src={`${props.img}`}
+      />
       <Card.Body>
         <Card.Title>{props.title} </Card.Title>
       </Card.Body>
       <ListGroup className='list-group-flush'>
         {props.text.map((info) => (
           <ListGroup.Item>
-            {' '}
-            <span>{info.prop}</span> {info.data}
+            <span>{info.prop}: </span> {info.data}
           </ListGroup.Item>
         ))}
       </ListGroup>
