@@ -57,7 +57,7 @@ function AboutUs() {
       </Row>
       <Form.Group className='mb-3'>
         <Form.Label>Poruka</Form.Label>
-        <Form.Control as='textarea' rows={5} />
+        <Form.Control as='textarea' rows={5} placeholder={'Napišite nam poruku ovdje:'} />
       </Form.Group>
       <Button
         onClick={(e) => {
