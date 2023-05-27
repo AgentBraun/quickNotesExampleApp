@@ -29,6 +29,22 @@ export async function deleteUser(userID: string) {
   await fetchData('/api/admin/' + userID, { method: 'DELETE' });
 }
 
+export interface UserInput {
+  username: string;
+  email: string;
+}
+
+export async function updateUser(userID: string, user: UserInput): Promise<User> {
+  const response = await fetchData('/api/admin/' + userID, {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+  return response.json();
+}
+
 export async function getLoggedInUser(): Promise<User> {
   const response = await fetchData('/api/users', { method: 'GET' });
   return response.json();

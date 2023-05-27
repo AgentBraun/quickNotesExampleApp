@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Button, Spinner, Table } from 'react-bootstrap';
+import { Button, Container, Spinner, Table } from 'react-bootstrap';
 import { User } from '../models/user';
 import * as NotesApi from '../network/notes_api';
 import classes from '../styles/utils.module.css';
+import EditUserModal from './EditUserModal';
 
 type Props = {};
 
@@ -10,6 +11,9 @@ const AdminView = (props: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [showUsersLoadingError, setShowUsersLoadingError] = useState(false);
+
+  const [showEditUserDialog, setShowEditUserDialog] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -59,7 +63,9 @@ const AdminView = (props: Props) => {
                     <Button variant='danger' size='sm' onClick={() => deleteUser(user)}>
                       izbriši
                     </Button>{' '}
-                    <Button size='sm'>Uredi</Button>
+                    <Button onClick={() => setShowEditUserDialog(true)} size='sm'>
+                      Uredi
+                    </Button>
                   </td>
                 ) : (
                   <td className={classes.flexCenterRow}>Admin</td>
@@ -67,9 +73,30 @@ const AdminView = (props: Props) => {
               </tr>
             ))}
         </tbody>
-        {usersLoading && <Spinner animation='border' variant='primary' />}
-        {showUsersLoadingError && <p>Something went wrong. Please refresh the page</p>}
       </Table>
+      {usersLoading && (
+        <Container className={classes.flexCenter}>
+          <Spinner animation='border' variant='primary' />
+        </Container>
+      )}
+      {showUsersLoadingError && <p>Something went wrong. Please refresh the page</p>}
+
+      {showEditUserDialog && (
+        <EditUserModal
+          userToEdit={userToEdit}
+          onDismis={() => {
+            setShowEditUserDialog(false);
+          }}
+          onUserSaved={(updatedUser) => {
+            setUsers(
+              users.map((existingUser) =>
+                existingUser._id === updatedUser._id ? updatedUser : existingUser
+              )
+            );
+            setShowEditUserDialog(false);
+          }}
+        />
+      )}
     </>
   );
 };
