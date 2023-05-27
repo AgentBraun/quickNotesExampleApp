@@ -7,4 +7,6 @@ router.get('/users', UserController.getUsers);
 
 router.delete('/:userID', UserController.deleteUser);
 
+router.patch('/:userID', UserController.updateUser);
+
 export default router;

@@ -33,7 +33,7 @@ app.use(
 
 app.use('/api/users', userRoutes);
 app.use('/api/notes', requiresAuth, notesRoutes);
-app.use('/api/admin/', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((req, res, next) => {
   next(createHttpError(404, 'endpoint not found!'));

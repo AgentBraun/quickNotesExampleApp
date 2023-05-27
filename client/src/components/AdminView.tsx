@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import { User } from '../models/user';
 import * as NotesApi from '../network/notes_api';
+import classes from '../styles/utils.module.css';
 
 type Props = {};
 
@@ -27,35 +28,47 @@ const AdminView = (props: Props) => {
     loadUsers();
   }, []);
 
+  const deleteUser = async (user: User) => {
+    try {
+      await NotesApi.deleteUser(user._id);
+      setUsers(users.filter((existingUser) => existingUser._id !== user._id));
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  };
+
   return (
     <>
       <Table striped>
         <thead>
           <tr>
             <th>Korisničko ime</th>
-            <th>email</th>
-            <th>opcije</th>
+            <th>Email</th>
+            <th className={classes.flexCenter}>opcije</th>
           </tr>
         </thead>
         <tbody>
           {users &&
             users.map((user) => (
-              <tr>
+              <tr key={user._id}>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 {user.roll ? (
-                  <td>
-                    <Button variant='danger' size='sm'>
+                  <td className={classes.flexCenter}>
+                    <Button variant='danger' size='sm' onClick={() => deleteUser(user)}>
                       izbriši
                     </Button>{' '}
                     <Button size='sm'>Uredi</Button>
                   </td>
                 ) : (
-                  ''
+                  <td className={classes.flexCenterRow}>Admin</td>
                 )}
               </tr>
             ))}
         </tbody>
+        {usersLoading && <Spinner animation='border' variant='primary' />}
+        {showUsersLoadingError && <p>Something went wrong. Please refresh the page</p>}
       </Table>
     </>
   );
