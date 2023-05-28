@@ -7,6 +7,7 @@ import TextInputField from './form/TextInputField';
 import classesUtils from '../styles/utils.module.css';
 import { useState } from 'react';
 import { ConflictError } from '../errors/http_error';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   onDismiss: () => void;
@@ -15,6 +16,11 @@ type Props = {
 
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }: Props) => {
   const [errorText, setErrorText] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
 
   const {
     register,
@@ -26,6 +32,7 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: Props) => {
     try {
       const newUser = await NotesApi.signUp(credentials);
       onSignUpSuccessful(newUser);
+      handleClick();
     } catch (error) {
       if (error instanceof ConflictError) {
         setErrorText(error.message);

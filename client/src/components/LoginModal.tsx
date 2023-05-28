@@ -7,6 +7,7 @@ import TextInputField from './form/TextInputField';
 import classesUtils from '../styles/utils.module.css';
 import { useState } from 'react';
 import { UnauthorizedError } from '../errors/http_error';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   onDismiss: () => void;
@@ -15,6 +16,11 @@ type Props = {
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: Props) => {
   const [errorText, setErrorText] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
 
   const {
     register,
@@ -26,6 +32,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: Props) => {
     try {
       const user = await NotesApi.login(credentials);
       onLoginSuccessful(user);
+      handleClick();
     } catch (error) {
       if (error instanceof UnauthorizedError) {
         setErrorText(error.message);

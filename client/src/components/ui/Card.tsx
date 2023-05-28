@@ -28,7 +28,7 @@ function CardUser(props: Props) {
       </Card.Body>
       <ListGroup className='list-group-flush'>
         {props.text.map((info) => (
-          <ListGroup.Item>
+          <ListGroup.Item key={info.prop}>
             <span>{info.prop}: </span> {info.data}
           </ListGroup.Item>
         ))}
