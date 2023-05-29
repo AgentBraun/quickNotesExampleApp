@@ -36,7 +36,7 @@ app.use('/api/notes', requiresAuth, notesRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.use((req, res, next) => {
-  next(createHttpError(404, 'endpoint not found!'));
+  next(createHttpError(404, 'endpoint not found!s'));
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
